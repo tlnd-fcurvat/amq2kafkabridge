@@ -7,12 +7,16 @@ public class BrokerFacade {
 
     private BrokerService brokerService;
 
-    public BrokerFacade(int port) throws Exception {
+    public BrokerFacade(int port, String jettyConfig) throws Exception {
         brokerService = new BrokerService();
         brokerService.setBrokerName("facade");
         brokerService.setUseJmx(false);
         brokerService.setPersistenceAdapter(new MemoryPersistenceAdapter());
-        brokerService.addConnector("http://0.0.0.0:" + port);
+        if (jettyConfig != null) {
+            brokerService.addConnector("http://0.0.0.0:" + port + "?jetty.config=" + jettyConfig);
+        } else {
+            brokerService.addConnector("http://0.0.0.0:" + port);
+        }
         brokerService.addConnector("vm://facade");
         brokerService.setPopulateJMSXUserID(true);
         brokerService.setUseAuthenticatedPrincipalForJMSXUserID(false);

@@ -30,9 +30,13 @@ public class Main {
         if (System.getenv("KAFKA_TOPIC") != null) {
             topic = System.getenv("KAFKA_TOPIC");
         }
+        String jettyConfig = null;
+        if (System.getenv("JETTY_CONFIG") != null) {
+            jettyConfig = System.getenv("JETTY_CONFIG");
+        }
 
         LOGGER.info("Starting bridge on http://0.0.0.0:{}", port);
-        BrokerFacade facade = new BrokerFacade(port);
+        BrokerFacade facade = new BrokerFacade(port, jettyConfig);
         facade.start();
 
         LOGGER.info("Starting kafka forwarder (http://0.0.0.0:{}/{} -> {}/{})", port, queueName, entrypoint, topic);
