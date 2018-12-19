@@ -15,13 +15,13 @@ public class JettyServer {
         server.setHandler(handler);
     }
 
+    public void addServlet(Class servletClass, String mapping) {
+        handler.addServletWithMapping(servletClass, mapping);
+    }
+
     public void start() throws Exception {
         server.start();
         server.join();
-    }
-
-    public void addServlet(Class servlet, String mapping) {
-        handler.addServletWithMapping(servlet, mapping);
     }
 
     public void stop() throws Exception {
