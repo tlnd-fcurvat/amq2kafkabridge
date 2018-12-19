@@ -15,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         int port = 8080;
-        if (System.getProperty("http.port") != null) {
-            port = Integer.parseInt(System.getProperty("http.port"));
+        if (System.getenv("HTTP_PORT") != null) {
+            port = Integer.parseInt(System.getenv("HTTP_PORT"));
         }
         String queueName = "INCOMING";
         if (System.getenv("JMS_QUEUE") != null) {

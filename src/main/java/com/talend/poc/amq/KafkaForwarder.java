@@ -34,7 +34,6 @@ public class KafkaForwarder implements MessageListener {
         properties.put("retries", "3");
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        properties.put("topic", topic);
         this.producer = new KafkaProducer<String, String>(properties);
     }
 
