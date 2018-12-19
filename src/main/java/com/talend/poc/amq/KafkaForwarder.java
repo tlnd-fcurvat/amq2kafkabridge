@@ -21,7 +21,6 @@ public class KafkaForwarder implements MessageListener {
         this.topic = topic;
         Properties properties = new Properties();
         properties.put("bootstrap.servers", entrypoint);
-        properties.put("client.id", "gateway");
         properties.put("acks", "all");
         properties.put("retries", "3");
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
