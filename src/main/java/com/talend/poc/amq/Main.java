@@ -22,18 +22,26 @@ public class Main {
         if (System.getenv("JMS_QUEUE") != null) {
             queueName = System.getenv("JMS_QUEUE");
         }
+        String entrypoint = "localhost:9092";
+        if (System.getenv("KAFKA_ENTRYPOINT") != null) {
+            entrypoint = System.getenv("KAFKA_ENTRYPOINT");
+        }
+        String topic = "INBOUND";
+        if (System.getenv("KAFKA_TOPIC") != null) {
+            topic = System.getenv("KAFKA_TOPIC");
+        }
 
         LOGGER.info("Starting bridge on http://0.0.0.0:{}", port);
         BrokerFacade facade = new BrokerFacade(port);
         facade.start();
 
-        LOGGER.info("Starting kafka forwarder ({})", queueName);
+        LOGGER.info("Starting kafka forwarder (http://0.0.0.0:{}/{} -> {}/{})", port, queueName, entrypoint, topic);
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://facade");
         Connection connection = connectionFactory.createConnection();
-        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Queue queue = session.createQueue(queueName);
         MessageConsumer messageConsumer = session.createConsumer(queue);
-        messageConsumer.setMessageListener(new KafkaForwarder());
+        messageConsumer.setMessageListener(new KafkaForwarder(entrypoint, topic));
         connection.start();
     }
 

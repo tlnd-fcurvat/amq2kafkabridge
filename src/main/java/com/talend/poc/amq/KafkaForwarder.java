@@ -14,19 +14,11 @@ public class KafkaForwarder implements MessageListener {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(KafkaForwarder.class);
 
-    private String entrypoint;
     private String topic;
     private KafkaProducer<String, String> producer;
 
-    public KafkaForwarder() {
-        this.entrypoint = "localhost:9092";
-        if (System.getenv("KAFKA_ENTRYPOINT") != null) {
-            this.entrypoint = System.getenv("KAFKA_ENTRYPOINT");
-        }
-        this.topic = "INBOUND";
-        if (System.getenv("KAFKA_TOPIC") != null) {
-            this.topic = System.getenv("KAFKA_TOPIC");
-        }
+    public KafkaForwarder(String entrypoint, String topic) {
+        this.topic = topic;
         Properties properties = new Properties();
         properties.put("bootstrap.servers", entrypoint);
         properties.put("client.id", "gateway");
@@ -34,16 +26,17 @@ public class KafkaForwarder implements MessageListener {
         properties.put("retries", "3");
         properties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        this.producer = new KafkaProducer<String, String>(properties);
+        this.producer = new KafkaProducer<>(properties);
     }
 
     @Override
     public void onMessage(Message message) {
         try {
-            producer.send(new ProducerRecord<String, String>(topic, ((TextMessage) message).getText()));
+            producer.send(new ProducerRecord<>(topic, ((TextMessage) message).getText())).get();
             producer.flush();
+            message.acknowledge();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Can't forward message to Kafka", e);
         }
     }
 
