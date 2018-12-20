@@ -14,6 +14,8 @@ public class Main {
     public final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
+        LOGGER.info("Max memory: {}", Runtime.getRuntime().maxMemory());
+
         int port = 8080;
         if (System.getenv("HTTP_PORT") != null) {
             port = Integer.parseInt(System.getenv("HTTP_PORT"));
