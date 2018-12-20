@@ -2,8 +2,12 @@ FROM java:8-jre-alpine
 
 COPY target/amq-http-to-kafka-bridge-1.0-SNAPSHOT-shaded.jar /bridge.jar
 COPY src/main/resources/jetty.xml /jetty.xml
+COPY src/main/resources/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENV JETTY_CONFIG /jetty.xml
 
+RUN chmod a+x /usr/local/bin/entrypoint.sh
+
 EXPOSE 8080
-CMD ["java", "-jar", "/bridge.jar"]
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
