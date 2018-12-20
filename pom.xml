@@ -44,13 +44,41 @@
             <artifactId>kafka-clients</artifactId>
             <version>${kafka.version}</version>
         </dependency>
-        <!--
         <dependency>
             <groupId>org.talend.ipaas.rt.activemq.security</groupId>
             <artifactId>activemq-security-plugin</artifactId>
             <version>2.5.0-SNAPSHOT</version>
         </dependency>
-        -->
+        <dependency>
+            <groupId>org.talend.ipaas.rt.activemq.security</groupId>
+            <artifactId>activemq-security-common</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.talend.ipaas.rt.activemq.security</groupId>
+            <artifactId>activemq-security-client</artifactId>
+            <version>2.5.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+            <version>3.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-client</artifactId>
+            <version>3.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>2.9.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.6</version>
+        </dependency>
     </dependencies>
 
     <repositories>

@@ -36,14 +36,18 @@ public class Main {
         if (System.getenv("JETTY_CONFIG") != null) {
             jettyConfig = System.getenv("JETTY_CONFIG");
         }
+        String syncopeAccess = System.getenv("SYNCOPE_ACCESS");
+        if (syncopeAccess == null) {
+            throw new RuntimeException("SYNCOPE_ACCESS is not set");
+        }
 
         LOGGER.info("Starting bridge on http://0.0.0.0:{}", port);
-        BrokerFacade facade = new BrokerFacade(port, jettyConfig);
+        BrokerFacade facade = new BrokerFacade(port, jettyConfig, syncopeAccess);
         facade.start();
 
         LOGGER.info("Starting kafka forwarder (http://0.0.0.0:{}/{} -> {}/{})", port, queueName, entrypoint, topic);
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://facade");
-        Connection connection = connectionFactory.createConnection();
+        Connection connection = connectionFactory.createConnection("tadmin", "tadmin");
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Queue queue = session.createQueue(queueName);
         MessageConsumer messageConsumer = session.createConsumer(queue);
