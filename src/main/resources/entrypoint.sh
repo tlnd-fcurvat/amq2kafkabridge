@@ -2,13 +2,18 @@
 
 set -e
 
-freeMem=$(awk '/MemFree/ { print int($2/1024) }' /proc/meminfo)
-s=$(($freeMem/10*8))
-x=$(($freeMem/10*8))
-n=$(($freeMem/10*2))
-export JVM_ARGS="-Xmn${n}m -Xms${s}m -Xmx${x}m"
+if [ -z "$JAVA_OPTS" ]; then
+    if [ -z "$HOST_MEM_MB" ]; then
+        export JAVA_OPTS="-Xmx512m"
+    else
+        s=$(($HOST_MEM_MB/10*8))
+        x=$(($HOST_MEM_MB/10*8))
+        n=$(($HOST_MEM_MB/10*2))
+        export JAVA_OPTS="-Xmn${n}m -Xms${s}m -Xmx${x}m"
+    fi
+fi
 
 echo "START Running gateway on $(date)"
-echo "JVM_ARGS=${JVM_ARGS}"
+echo "JAVA_OPTS=${JAVA_OPTS}"
 
-exec java $JVM_ARGS -jar bridge.jar
+exec java $JAVA_OPTS -jar bridge.jar

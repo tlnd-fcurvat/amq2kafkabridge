@@ -5,6 +5,7 @@ COPY src/main/resources/jetty.xml /jetty.xml
 COPY src/main/resources/entrypoint.sh /usr/local/bin/entrypoint.sh
 
 ENV JETTY_CONFIG /jetty.xml
+ENV HOST_MEM_MB 512
 
 RUN chmod a+x /usr/local/bin/entrypoint.sh
 
