@@ -40,6 +40,14 @@ public class Main {
         if (syncopeAccess == null) {
             throw new RuntimeException("SYNCOPE_ACCESS is not set");
         }
+        String activemqUsername = System.getenv("ACTIVEMQ_USERNAME");
+        if (activemqUsername == null) {
+            throw new RuntimeException("ACTIVEMQ_USERNAME is not set");
+        }
+        String activemqPassword = System.getenv("ACTIVEMQ_PASSWORD");
+        if (activemqPassword == null) {
+            throw new RuntimeException("ACTIVEMQ_PASSWORD is not set");
+        }
 
         LOGGER.info("Starting bridge on http://0.0.0.0:{}", port);
         BrokerFacade facade = new BrokerFacade(port, jettyConfig, syncopeAccess);
@@ -47,7 +55,7 @@ public class Main {
 
         LOGGER.info("Starting kafka forwarder (http://0.0.0.0:{}/{} -> {}/{})", port, queueName, entrypoint, topic);
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://facade");
-        Connection connection = connectionFactory.createConnection("tadmin", "tadmin");
+        Connection connection = connectionFactory.createConnection(activemqUsername, activemqPassword);
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
         Queue queue = session.createQueue(queueName);
         MessageConsumer messageConsumer = session.createConsumer(queue);
